@@ -1,0 +1,458 @@
+/*gzip*/
+body {
+  font-family: Helvetica, sans-serif;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+       -moz-user-select: none; /* Firefox */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+  background-color: #ECEDF1;
+}
+#tittle{
+  font-size: 25px; 
+  padding: 0px 0 0 10px;
+}
+#content{ 
+  padding: 8px;
+}
+#List_Devices{
+    width: 50%;
+  }
+.radio-connect{
+  transform:  scale(2);
+}
+.navcontent{
+  padding: 0px 5px 5px 5px;
+  transition: 0.3s;
+}
+.div-content{
+  margin-bottom: 5px;
+  background-color:#F8F9FC; 
+  border-radius: 7px;
+}
+
+/*.custom-radio-ra::before ,.custom-radio-ra::after{transform:  scale(1.5);}*/
+/*begin sidebar*/
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  vertical-align: middle;
+  background-color: #67e6dc;  /*color sidebar*/
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 20px;
+  white-space: nowrap;
+}
+
+.sidebar a {
+  padding: 5px 8px 5px 8px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+
+}
+
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+.sidebar .closebtn {
+  position: absolute;
+  top: -5;
+  right: 5px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+.sidebar button{
+  display: block;
+  background-color: inherit;
+  color: black;
+  padding: 10px 16px;
+  width: 100%;
+  border: none;
+  outline: none;
+  /*text-align: left;*/
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 17px;
+  text-align: center;
+  font-weight: 700;
+}
+.sidebar button.active {
+    background-color: #3498db;
+}
+/*end of sidebar*/
+/*begin navbar*/
+.navbar{
+  top: 0;
+  z-index: 1;
+  position: sticky;
+  margin: 0 0 10px;
+}
+
+/*end of navbar*/
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #3498db;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+}
+
+.openbtn:hover {
+  background-color: #444;
+}
+
+#container {
+  transition: 0.5s;
+  padding-left: 0px;
+  min-height: 100%;
+}
+
+/*dsdsdsdsd*/
+.lb-tcp{
+  width: 110px;
+}
+
+.lb1, .lb2{
+  display: inline-block;
+  width: 180px;
+}
+
+/*dsdsdsd*/
+
+
+.ip_input .input_{
+  text-align: center;
+  padding: 0 5px 0 5px;
+  width: 50px;
+}
+.input-50px{
+  text-align: center;
+  padding: 0 5px 0 5px;
+  width: 50px;
+  border-radius: 4px;
+  height: 38px;
+}
+
+.spanx span{
+  padding-bottom: 5px;;
+  align-self: flex-end;
+}
+.space-bw{
+  display: flex; 
+  justify-content: space-between;
+}
+.space-end{
+  display: flex; 
+  justify-content: flex-end;
+}
+/*dsdsdsd*/
+.rl-enable-div{
+  width: 50%;
+}
+.radio-btn {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+}
+.raito-lb{
+    padding: 3px 0px 0px;
+    vertical-align: middle;
+}
+#static-ip, #static-ip-1{
+  width: 100%;
+  opacity: 0.4;
+  pointer-events: none;
+}
+.nav-pills li a.active {
+  display: block;
+  background-color: #3498db !important;
+}
+.btn-primary{
+  background-color: #3498db !important;
+  border-color: #3498db;
+}
+.btn-danger{
+  background-color: #ff5252;
+  border-color: #ff5252;
+}
+/******************************************/
+  .lb-toggle{
+    display: flex;
+    vertical-align: middle;
+    align-items: center;
+    height: 28px;
+  }
+  .toggle {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 57px;
+    height: 28px;
+    display: inline-block;
+    position: relative;
+    border-radius: 50px;
+    overflow: hidden;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color:#ee5253;
+    transition: background-color ease 0.3s;
+  }
+
+  .toggle:before {
+    content: "on off";
+    display: inline-block;
+    position: absolute;
+    z-index: 0;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    font: 10px/24px Helvetica;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-indent: -20px;
+    word-spacing: 30px;
+    color: #fff;
+    text-shadow: -1px -1px rgba(0,0,0,0.15);
+    white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    transition: all cubic-bezier(0.3, 1.5, 0.7, 1) 0.3s;
+  }
+  .toggle:checked {
+    background-color: #4CD964;
+  }
+  .toggle:checked:before {
+    left: 32px;
+  }
+
+  .auto-manu{width: 50%;}
+  .auto-manu .toggle{ width: 83px;}
+  .auto-manu .toggle:before{
+    content: "auto manual";
+    word-spacing: 40px;
+     text-indent: -40px;
+  }
+  .auto-manu .toggle:checked:before {
+    left: 57px;
+  }
+/*****************************************/
+#toast-container {
+  position: sticky;
+  z-index: 1055;
+  top: 0;
+}
+
+#toast-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+}
+
+#toast-container>#toast-wrapper>.toast {
+  min-width: 350px;
+}
+
+#toast-container>#toast-wrapper>.toast>.toast-header strong {
+  padding-right: 20px;
+}
+/*****************************************/
+
+#t_WiFiList, #t_ModbusList {
+  border-collapse: collapse;
+}
+#t_WiFiList td, #t_ModbusList td{
+  text-align: center;
+  vertical-align: middle;
+  height: 30px;
+  padding: 0px;
+}
+#t_WiFiList th, #t_ModbusList th{
+  border: 1px;
+  text-align: center;
+  position: sticky; top: 0;background:#eee;
+  padding: 7px 10px; 
+}
+
+.footer {
+  position: relative;
+  height: 200px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: #2D3E50;
+  color: white;
+}
+
+#guide{
+  transition: 2s;
+}
+
+.guide-content{
+  transition: 2s;
+/*  display: none;*/
+}
+.footer div{
+  padding: 20px 20px 10px 30px;
+  height: 100px;
+  margin: 0 250px;
+}
+
+#menu-sub{
+  display: none;
+}
+.other-option{
+  margin-left: 293px;
+}
+/* accrodion toggle button */
+.accordion-toggle:after {
+  content: "▬";/* adjust as needed, taken from font-awesome.css */
+  float: right;
+  font-weight: bold;
+}
+.accordion-toggle.collapsed:after {
+  content: "✚";  /* adjust as needed, taken from font-awesome.css */
+  font-weight: bold;
+}
+
+#loading{
+  background: linear-gradient(to right, silver, teal);
+}
+.lb-info{
+  width: 200px;
+}
+.centered{
+  width:400px;
+  height:100px;
+    top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position:absolute;
+}
+.blob-1,.blob-2{
+  width:35px;
+  height:35px;
+  position:absolute;
+  background:#fff;
+  border-radius:50%;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+}
+.blob-1{
+  left:20%;
+  animation:osc-l 2.5s ease infinite;
+  background: #0072BC;
+}
+.blob-2{
+  left:80%;
+  animation:osc-r 2.5s ease infinite;
+  background:#ED1C24;
+}
+@keyframes osc-l{
+  0%{left:20%;}
+  50%{left:50%;}
+  100%{left:20%;}
+}
+@keyframes osc-r{
+  0%{left:80%;}
+  50%{left:50%;}
+  100%{left:80%;}
+}
+
+.s-time{
+  padding: 0px 180px 0px 10px;
+}
+.lb-38{
+  display: table-cell; 
+  vertical-align: middle; 
+  height: 38px;
+}
+.other-select{
+  width: 244px;
+}
+#device_info{ width: 50%;}
+#device-info-div {margin-left:  5px; margin-right: 0px;}
+#btn-guide{ display: none; }
+/**/
+
+/* On smaller screens, where height is less than 750px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-width: 750px) {
+  .btn{
+    padding: 5px 9px;
+    font-size: 15px;
+    line-height: 1.5;
+    border-radius: 3px;
+  }
+  #menu-sub{
+  display: block;
+}
+#device_info{ width: 100%;}
+#device-info-div {margin-left:  5px; margin-right: 5px;}
+#btn-guide{ display: block; }
+.s-time{
+  padding: 0px 0px 0px 0px;
+}
+.other-select{
+  width: 208px;
+}
+.rl-enable-div{
+  width: 100%;
+}
+  #content{ padding: 0px;}
+  .txt-toggle{ width: 250px;}
+  #sel-app{ width: 130px; }
+  #tittle{font-size: 20px; padding: 5px 0 0 10px;}
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+  .navbar-toggler{
+    font-size: 16px;
+  }
+  .auto-manu{width: 100%;}
+  .card-connect{
+    width: 100%;
+    margin: 10px 0px 10px;
+  }
+  #content{
+    padding: 0px;
+  }
+  .input-50px{
+    padding: 0 2px 0 2px;
+    width: 41px;
+    height: 32px;
+  }
+  #guide{
+    display: none;
+    /*height: 10px;*/
+    top:0px;
+  }
+  
+  #List_Devices{
+    width: 100%;
+  }
+  #lb-wifiEth-hd{
+    margin: none;
+  }
+
+  .footer div{
+    font-size: 15px;
+    padding: 10px;
+    height: 100px;
+    margin: 0px;
+  }
+  .other-option{
+  margin-left: 0px;
+}
+}
+

@@ -1,0 +1,207 @@
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>LOGIN</title>
+</head>
+<style type="text/css">
+	* {
+		box-sizing: border-box;
+	}
+
+	*:focus {
+		outline: none;
+	}
+	body {
+		font-family: Arial;
+		background-color: #3498DB;
+	}
+
+	.login {
+		margin: 100px auto;
+		width: 300px;
+	}
+
+	.login-screen {
+		background-color: #FFF;
+		padding: 20px;
+		border-radius: 5px
+	}
+
+	.app-title {
+		text-align: center;
+		color: #777;
+	}
+
+	.login-form {
+		text-align: center;
+	}
+
+	.control-group {
+		margin-bottom: 10px;
+	}
+
+	input {
+		text-align: center;
+		background-color: #ECF0F1;
+		border: 2px solid transparent;
+		border-radius: 3px;
+		font-size: 16px;
+		/*font-weight: 200;*/
+		padding: 10px 0;
+		width: 250px;
+		transition: border .5s;
+	}
+
+	input:focus {
+		border: 2px solid #3498DB;
+		box-shadow: none;
+	}
+
+	.btn {
+		border: 2px solid transparent;
+		background: #3498DB;
+		color: #ffffff;
+		font-size: 16px;
+		line-height: 25px;
+		padding: 10px 0;
+		text-decoration: none;
+		text-shadow: none;
+		border-radius: 3px;
+		box-shadow: none;
+		transition: 0.25s;
+		display: block;
+		width: 250px;
+		margin: 0 auto;
+	}
+
+	.btn:hover {
+		background-color: #2980B9;
+	}
+	@media screen and (max-width: 750px) {
+		.login{
+			width: 90%;
+		}
+
+	}
+
+</style>
+<body>
+
+	<div class="login">
+		<div class="login-screen">
+			<div class="app-title">
+				<h1>Login</h1>
+			</div>
+			
+			<div class="login-form">
+				<div class="control-group">
+					<input type="text" class="login-field" value="" placeholder="username" id="user">
+				</div>
+
+				<div class="control-group">
+					<input type="password" class="login-field" value="" placeholder="password" id="pass">
+				</div>
+
+				<button class="btn btn-primary btn-large btn-block" onclick="Login()" id="btnLogin">Let me in</button>
+				
+			</div>
+			
+			<form id="login" action="/">
+			</form>
+		</div>
+	</div>
+
+</body>
+<script type="text/javascript">
+function http_handle(handle){
+}
+function http_post(mess,err,url,handle){
+	var xhttp = new XMLHttpRequest();
+	xhttp.onload=function(){
+		if(this.readyState==4 && this.status==200){
+			
+			switch(handle){
+				case 20:
+				if(this.responseText!="err")
+					document.getElementById(this.responseText).submit();
+				else
+					document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+				break;
+				case 21:
+				if(this.responseText!="err"){
+					setCookie("username",this.responseText,30);
+					document.getElementById("login").submit();
+				}
+				else{
+					alert("Sai thông tin đăng nhập");
+				}
+				break;
+			}
+		}else{
+			alert(err + this.status);
+		}
+	}
+	xhttp.ontimeout=function(){
+		alert(err );
+	}
+	xhttp.timeout = 10000;
+	xhttp.open("POST", url, true);
+
+	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhttp.send(mess);
+}
+
+function setCookie(cname,cvalue,exdays) {
+	var d = new Date();
+	d.setTime(d.getTime() + (exdays*24*60*60*1000));
+	var expires = "expires=" + d.toGMTString();
+	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var decodedCookie = decodeURIComponent(document.cookie);
+	var ca = decodedCookie.split(';');
+	for(var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
+}
+
+function checkCookie() {
+	var user=getCookie("username");
+	if (user != "") {
+		var mes='m=20'+'&user='+user;
+		http_post(mes,"","/c",20);
+	}
+}
+
+function Login(){
+	var user=document.getElementById("user").value;
+	var pass=document.getElementById("pass").value;
+
+	if(user!="" && pass!=""){
+		var mes="m=21&user="+user+"&pass="+pass;
+		http_post(mes,"Login Err","/c",21);
+	}
+}
+ checkCookie();
+
+var pass = document.getElementById("pass");
+pass.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    document.getElementById("btnLogin").click();
+  }
+});
+
+</script>
+</html>
