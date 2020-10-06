@@ -104,29 +104,29 @@ String HuaweiV3::getString()
     // api
     String s = "";
 #if API_VERSION == 1
-    res += "{\"manufacture\":\"Huawei\"";
-    res += ",\"md\":\"solar inverter\"";
-    res += ",\"serial\":\"" + String("") + "\"";
-    res += ",\"code\":\"" + String("") + "\",";
-    res += "\"hwver\":\"" + String("") + "\"";
-    res += ",\"fwver\":\"" + String("") + "\"";
-    res += ",\"time\":\"" String("") "\"";
-    res += ",\"connection\":{\"status\":" + String(status ? 1 : 0);
-    res += ",\"protocol\":1";
-    res += ",\"id\":" + String(id);
-    res += ",\"mid\":" + String(local_id);
-    res += ",\"ip\":\"" + String("") + "\"";
-    res += ",\"port\":0";
-    res += ",\"latency\":0}";
-    res += ",\"state\":{\"state\":" + String(0);
-    res += ",\"fault\":" + String(0);
-    res += ",\"warning\":" + String(0) + "}";
-    res += ",\"data\":{";
+    s += "{\"manufacture\":\"Huawei\"";
+    s += ",\"md\":\"solar inverter\"";
+    s += ",\"serial\":\"" + String("") + "\"";
+    s += ",\"code\":\"" + String("") + "\",";
+    s += "\"hwver\":\"" + String("") + "\"";
+    s += ",\"fwver\":\"" + String("") + "\"";
+    s += ",\"time\":\"" + String("") + "\"";
+    s += ",\"connection\":{\"status\":" + String(status ? 1 : 0);
+    s += ",\"protocol\":1";
+    s += ",\"id\":" + String(id);
+    s += ",\"mid\":" + String(local_id);
+    s += ",\"ip\":\"" + String("") + "\"";
+    s += ",\"port\":0";
+    s += ",\"latency\":0}";
+    s += ",\"state\":{\"state\":" + String(0);
+    s += ",\"fault\":" + String(0);
+    s += ",\"warning\":" + String(0) + "}";
+    s += ",\"data\":{";
     if (status == true)
     {
-        res += data;
+        s += data;
     }
-    res += "},\"root\":\"\"}";
+    s += "},\"root\": 0}";
 #elif API_VERSION == 0
     s += APIHeader();
     s += ",HuaweiInverterV3List:[{";

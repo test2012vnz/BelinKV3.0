@@ -98,7 +98,7 @@ private:
 #elif API_VERSION == 0
         s += APIHeader();
         s += ",KippZonenList:[{";
-        s += "DevID:" + String(local_id);
+        s += "DevID:" + String(id);
         if (status == false)
         {
             s += ",Status:0";

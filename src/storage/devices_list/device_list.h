@@ -6,7 +6,7 @@
 #include "../../driver/memory/NVS/NVS.h"
 
 #define DEVICES_PARTITION "device_list"
-#define DEVICES_MAXIMUM 32
+#define DEVICES_MAXIMUM 60
 
 class DeviceInfo
 {

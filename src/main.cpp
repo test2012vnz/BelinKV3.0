@@ -46,7 +46,7 @@ void loop()
         read_device = seconds();
         if (com.process->hasSyncPoll())
         {
-            log_d("================Poll sync flag================");
+            log_d("================Poll sync flag================1");
             com.process->setSyncPoll(false);
             storage.dev->sync_to_process();
         }
@@ -57,5 +57,6 @@ void loop()
         log_d("---- ESP RESTART ---- time");
         ESP.restart();
     }
-    vTaskDelay(10);
+    vTaskDelay(1000);
 }
+

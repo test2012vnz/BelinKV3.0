@@ -5,6 +5,7 @@ bool DPM::load()
 {
     status = false;
     d = {};
+    rs485->config(9600, SERIAL_8N1);
     if (readHreg(4000, (uint16_t *)&d, 88) == 0)
     {
         status = true;

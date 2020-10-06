@@ -7,6 +7,7 @@ bool SDCardCLass::begin(uint32_t frequency, const char *mountpoint)
     {
         if (SD.begin(SPIss, SDspi, frequency, mountpoint))
         {
+            log_d("---- SD Card Init OK ----");
             status = true;
         }
     }
@@ -14,6 +15,7 @@ bool SDCardCLass::begin(uint32_t frequency, const char *mountpoint)
     {
         if (SD.begin())
         {
+            log_d("---- SD Card Init OK ----");
             status = true;
         }
     }
@@ -22,23 +24,42 @@ bool SDCardCLass::begin(uint32_t frequency, const char *mountpoint)
 
 void SDCardCLass::end()
 {
-    SD.end();
+    if (status)
+    {
+        SD.end();
+    }
 }
 uint64_t SDCardCLass::cardSize()
 {
-    return SD.cardSize();
+    if (status)
+    {
+        return SD.cardSize();
+    }
+    return 0;
 }
 uint64_t SDCardCLass::totalBytes()
 {
-    return SD.totalBytes();
+    if (status)
+    {
+        return SD.totalBytes();
+    }
+    return 0;
 }
 uint64_t SDCardCLass::usedBytes()
 {
-    return SD.usedBytes();
+    if (status)
+    {
+        return SD.usedBytes();
+    }
+    return 0;
 }
 
 bool SDCardCLass::createDir(String path)
 {
+    if (!status)
+    {
+        return false;
+    }
     log_d("Creating Dir: %s", path.c_str());
     int breakDir = path.indexOf("/", 1);
     if (breakDir > 0)
@@ -65,8 +86,12 @@ bool SDCardCLass::createDir(String path)
 
 void SDCardCLass::listDir(const char *dirname, uint8_t levels)
 {
+    if (!status)
+    {
+        return;
+    }
     File root = SD.open(dirname);
-    if (!root)
+    if (!status || !root)
     {
         log_d("Failed to open directory");
         return;
@@ -99,6 +124,10 @@ void SDCardCLass::listDir(const char *dirname, uint8_t levels)
 
 bool SDCardCLass::removeDir(String path)
 {
+    if (!status)
+    {
+        return false;
+    }
     log_d("Removing Dir: %s", path.c_str());
     if (SD.rmdir(path.c_str()))
     {
@@ -111,9 +140,36 @@ bool SDCardCLass::removeDir(String path)
 
 bool SDCardCLass::existFile(String path)
 {
+    if (!status)
+    {
+        return false;
+    }
     if (SD.exists(path.c_str()))
     {
         return true;
     }
     return false;
+}
+
+void SDCardCLass::appendFile(String path, String message)
+{
+    if (!status)
+    {
+        return;
+    }
+    File file = SD.open(path.c_str(), FILE_APPEND);
+    if (!file)
+    {
+
+        log_d("File append: FILE NOT EXISTS %s", path.c_str());
+    }
+    if (file.println(message.c_str()))
+    {
+        log_d("Appended to file: %s", path.c_str());
+    }
+    else
+    {
+        log_d("Appended FAILED to file: %s", path.c_str());
+    }
+    file.close();
 }

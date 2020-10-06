@@ -22,25 +22,27 @@ void SystemProcess::system_task(void *arg)
 
 String SystemProcess::j_device()
 {
-    String data = "\"type\": \"" + String(DEVICE_MODEL) + "\"";
+    String data = "\"uuid\":\"" +String("") + "\"";
+    data += ",\"type\": \"" + String(DEVICE_MODEL) + "\"";
     data += ",\"serial\": \"" + sysConf->get_serial_number() + "\"";
-    data += ",\"hwver\": \"" + String(DEVICE_HARDWARE) + "\"";
-    data += ",\"fwver\": \"" + String(DEVICE_FIRMWARE) + "\"";
+    data += ",\"hardware_version\": \"" + String(DEVICE_HARDWARE) + "\"";
+    data += ",\"firmware_version\": \"" + String(DEVICE_FIRMWARE) + "\"";
     data += ",\"boot\": \"" + String(0) + "\"";
     // status
-    data += ",\"status\":{\"state\":" + String(0);
-    data += ",\"fault\":" + String(0);
-    data += ",\"warning\":" + String(0) + "}";
+    data += ",\"status\":{\"state\":\"" + String("normal") + "\"";
+    data += ",\"fault_code\":" + String(0);
+    data += ",\"waring_code\":[" + String(0) + "]}";
     // cpu
     data += ",\"cpu\":{\"type\":\"ESP32\"";
     data += ",\"usage\":\"\"}";
     // ram
     data += ",\"ram\":{\"type\":\"\"";
     data += ",\"usage\":" + String(ESP.getFreeHeap());
-    data += ",\"total\":" + String(ESP.getHeapSize()) + "}";
+    data += ",\"total\":" + String(ESP.getHeapSize());
+    data += ",\"type\": \"DDR3\"}";
     // temperature
     data += ",\"temp\":{\"cpu\":" + String((temprature_sens_read() - 32) / 1.8);
-    data += ",\"board\": " + String(0) + "}";
+    data += ",\"main\": " + String(0) + "}";
     // storage
     data += ",\"storage\":{\"internal\":{\"usage\":" + String(0);
     data += ",\"total\":" + String(0) + "}";

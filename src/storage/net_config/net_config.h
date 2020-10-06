@@ -24,10 +24,13 @@ public:
     static bool set(Wifi_Structure i);
     static bool set(Ethernet_Structure i);
     static bool set(GSM_3G_Structure i);
+    static bool set(Google_Registry_Structure i);
 
     static bool set_wifi(uint8_t e, char *ssid, char *pass);
     static bool set_eth(uint8_t e, uint8_t dhcp, uint32_t local_ip = 0, uint32_t gateway = 0, uint32_t subnet = 0);
     static bool set_gsm(uint8_t e);
+
+    static bool set_gg(char *ProjectID, char* Location, char* Registry_id, char* Device_id, char* Private_Key);
 
     void set_net_sync_handle(void (*fn)(NetIF_Task_Structure))
     {

@@ -57,7 +57,6 @@ public:
     {
         initPinOut();
         PORT->push(1, 1, RS485_RX_PIN, RS485_TX_PIN); //RS485
-        sd->begin();
 
         net->connect_ap(storage->sys->get_serial_number(), "");
         simSerial = new HardwareSerial(2);
@@ -65,6 +64,7 @@ public:
         net->set_gsm_reset_fnc(gsm_reset);
         net->set_eth_reset_fnc(ethernet_reset);
         net->set_eth_disable_fnc(ethernet_disable);
+        net->set_gg_handle_fnc(google_mess_recieved_handle);
         net->begin();
 
         sysDriver->set_storage_ptr(storage->sys);
@@ -111,6 +111,7 @@ public:
     bool set_wifi(uint8_t e, char *ssid, char *pass);
     bool set_eth(uint8_t e, uint8_t dhcp, uint32_t local_ip = 0, uint32_t gateway = 0, uint32_t subnet = 0);
     bool set_gsm(uint8_t e);
+    bool set_ggc(char *ProjectID, char* Location, char* Registry_id, char* Device_id, char* Private_Key);
     static NetIF_Task_Structure get_netif();
     static bool API_Send_Message(String api, bool is_swh_system = false);
     static bool websocket_send(String data)
@@ -154,6 +155,9 @@ public:
     bool delTCP(Device_Name_Can_Be_Read device, uint8_t ID, uint32_t IP, int32_t port, uint8_t ss_en = 0);
     bool delIEC(Device_Name_Can_Be_Read device, char *ID, uint8_t com, uint16_t primary, uint16_t secondary);
     String devicesListString();
+
+    // GGC MQTT HANDLE
+    static void google_mess_recieved_handle(String &topic, String& payload);
 
     //
     static NetworkClass *net;

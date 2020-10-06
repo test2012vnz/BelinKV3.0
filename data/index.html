@@ -202,7 +202,18 @@
           <div class="card div-content p-2">
             <h5>Test</h5>
             <input class="toggle float-right btnTest" type="checkbox" id="led1-test" onclick="bl_test_fnc(this)" />
-
+            <label >project id</label>
+            <input type="text" id="t_project_id" style="width: 250px;" value="esp32-ota-243303">
+            <label>region</label>
+            <input type="text" id="t_region" style="width: 250px;" value="asia-east1">
+            <label>registry id</label>
+            <input type="text" id="t_registry" style="width: 250px;" value="belink-test-v3.0">
+            <label>device id</label>
+            <input type="text" id="t_device_id" style="width: 250px;" value="belink-test-01">
+            <label>private key</label>
+            <!-- <input type="text" id="t_private_key"> -->
+            <textarea name="" id="t_private_key" cols="50" rows="5"></textarea>
+            <button class="btn btn-primary mt-2" style="width: 150px;" onclick="test1()">set ggc info</button>
           </div>
 
           <!-- ---------------------------- -->
@@ -236,40 +247,6 @@
 
         </div>
         <!-- ---------------------------- -->
-        <!-- ---------------------------- -->
-        <!-- <div class="navcontent" id="hardware-test">
-          <div class="clearfix mr-3">
-            <h4 class="float-left" id="">Kiểm tra phần cứng</h4>
-            <input class="toggle float-right" type="checkbox" id="test-enable" onclick="TestMode(this);" />
-          </div>
-          <div class="card div-content p-3 ">
-            <div>
-              <h4>LED</h4>
-              <div class="clearfix py-1">
-                <label class="float-left d-flex align-items-center m-0" style="height: 28px;">LED 1</label>
-                <input class="toggle float-right btnTest" type="checkbox" id="led1-test"
-                  onclick="TestComponents(1, 1, this)" />
-              </div>
-              <div class="clearfix py-1">
-                <label class="float-left d-flex align-items-center m-0" style="height: 28px;">LED 2</label>
-                <input class="toggle float-right btnTest" type="checkbox" id="led1-test"
-                  onclick="TestComponents(1, 2, this)" />
-              </div>
-            </div>
-            <hr class="w-100 my-2">
-
-            <div>
-              <h4>Relay</h4>
-              <div class="clearfix py-1">
-                <label class="float-left d-flex align-items-center m-0" style="height: 28px;">Relay 1</label>
-                <input class="toggle float-right btnTest" type="checkbox" id="led1-test"
-                  onclick="TestComponents(2, 1, this)" />
-              </div>
-            </div>
-            <hr class="w-100 my-2">
-          </div>
-        </div> -->
-        <!-- ----------------------------1017-->
         <!-- ---------------------------- -->
         <div class="navcontent w-100" id="connection-setting">
           <h4 id="lb-connect-hd"> Cài đặt kết nối</h4>

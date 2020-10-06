@@ -17,7 +17,8 @@ bool NetConfig::sync()
     {
         NVS.getBytes(name_partition.c_str(), &netif, len);
         // sync netif
-        if(sync_net != nullptr){
+        if (sync_net != nullptr)
+        {
             sync_net(netif);
         }
         return true;
@@ -63,6 +64,11 @@ bool NetConfig::set(GSM_3G_Structure i)
     netif.gsm = i;
     return set(netif);
 }
+bool NetConfig::set(Google_Registry_Structure i)
+{
+    netif.gg = i;
+    return set(netif);
+}
 
 //*******************************************************
 bool NetConfig::set_wifi(uint8_t e, char *ssid, char *pass)
@@ -92,5 +98,17 @@ bool NetConfig::set_gsm(uint8_t e)
     GSM_3G_Structure i;
     memset(&i, 0, sizeof(GSM_3G_Structure));
     i.ENABLE = e;
+    return set(i);
+}
+
+bool NetConfig::set_gg(char *ProjectID, char *Location, char *Registry_id, char *Device_id, char *Private_Key)
+{
+    Google_Registry_Structure i;
+    memset(&i, 0, sizeof(Google_Registry_Structure));
+    memcpy(i.ProjectID, ProjectID, String(ProjectID).length());
+    memcpy(i.Location, Location, String(Location).length());
+    memcpy(i.Registry_id, Registry_id, String(Registry_id).length());
+    memcpy(i.Device_id, Device_id, String(Device_id).length());
+    memcpy(i.Private_Key, Private_Key, String(Private_Key).length());
     return set(i);
 }

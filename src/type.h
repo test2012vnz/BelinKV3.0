@@ -6,7 +6,7 @@
 #define DEVICE_MODEL "BelinK_V2"
 #define DEVICE_FIRMWARE "3.0.0B"
 #define DEVICE_HARDWARE "2.0.0"
-#define API_VERSION 0
+#define API_VERSION 0           // 0: fw 2.0, 1: google cloud
 
 //
 #define HTTP_DOMAIN "http://ssoc.solarbk.vn"
@@ -47,7 +47,7 @@ typedef enum
     SMA_Grid_Tie,                   //7	TCP 		ss
     SMA_Battery_Inverter,           //8	TCP
     SMA_SolidQ,                     //9
-    ABB_Grid_Tie,                   //10	RTU 	ss
+    ABB_Grid_Tie,                   //10s	RTU 	ss
     Fronius_Grid_Tie,               //11	RTU 	ss
     SolarEdge_Grid_Tie,             //12	RTU 	ss
     Sungrow_Grid_Tie,               //13	RTU 	ss
@@ -57,6 +57,8 @@ typedef enum
     Kipp_and_Zonen_Solar_Radiation, //17    RTU
     IMT_Solar_Radiation,            //18    RTU
     SWH_System,                     //19    RTU     Master
+    SMA_RTU,                        //20 rtu
+    SMA_TCP,                        //21
     Device_List_Maximum
     // kaco                 ss
 } Device_Name_Can_Be_Read;
@@ -274,6 +276,28 @@ struct GSM_3G_Structure
     }
 };
 
+struct Google_Registry_Structure
+{
+    uint8_t STATUS;
+    char ProjectID[30];
+    char Location[20];
+    char Registry_id[30];
+    char Device_id[30];
+    char Private_Key[300];
+    Google_Registry_Structure &operator=(Google_Registry_Structure &a)
+    {
+        memset(this, 0, sizeof(Google_Registry_Structure));
+        STATUS = a.STATUS;
+        memcpy(ProjectID, a.ProjectID, String(a.ProjectID).length());
+        memcpy(Location, a.Location, String(a.Location).length());
+        memcpy(Registry_id, a.Registry_id, String(a.Registry_id).length());
+        memcpy(Device_id, a.Device_id, String(a.Device_id).length());
+        memcpy(Private_Key, a.Private_Key, String(a.Private_Key).length());
+        return *this;
+    }
+    
+};
+
 typedef enum
 {
     Internet_Connection_None = 0,
@@ -288,6 +312,7 @@ typedef struct
     Wifi_Structure wifi;
     Ethernet_Structure eth;
     GSM_3G_Structure gsm;
+    Google_Registry_Structure gg;
 } NetIF_Task_Structure;
 
 typedef struct

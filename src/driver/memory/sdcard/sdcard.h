@@ -15,7 +15,16 @@ public:
         SPIss = ss;
         SDspi.begin(sck, miso, mosi, ss);
         begin();
-        // print();
+        listDir("/DATA", 0);
+        uint8_t count_data_dir = getFileCount("/DATA"); // check total dir in "/DATA"
+        log_d("count data : %d", count_data_dir);
+        while (count_data_dir > 4)
+        {
+            log_d("count data : %d", count_data_dir);
+            removeDir(getFirstDirName("/DATA").c_str());
+            count_data_dir = getFileCount("/DATA");
+        }
+        // del_first_line("/DATA/202009/09.txt");
     }
     ~SDCardCLass()
     {
@@ -34,31 +43,84 @@ public:
     bool createDir(String path);
     bool removeDir(String path);
 
+    void appendFile(String path, String message);
+
+    void write_log(String message)
+    {
+        if (!status)
+        {
+            return;
+        }
+        String path = get_path();
+        if (path != "")
+        {
+
+            listDir("/DATA", 2);
+            appendFile(path.c_str(), message.c_str());
+        }
+    }
+
 private:
     bool status = false;
     SPIClass SDspi; //spi
     int8_t SPIss = -1;
 
+    // custom
+    bool del_first_dir()
+    {
+        return false;
+    }
+    String del_first_line(String path)
+    {
+        if (!SD.exists(path.c_str()))
+        {
+            return "";
+        }
+        File myFile = SD.open(path.c_str(), FILE_WRITE);
+        if (myFile)
+        {
+            myFile.println("testing 1, 2, 3.");
+            myFile.close();
+            Serial.println("1st write done");
+        }
+
+        myFile = SD.open(path.c_str(), FILE_WRITE);
+        if (myFile)
+        {
+            myFile.println("testing 4, 5, 6.");
+            myFile.close();
+            Serial.println("2nd write done");
+        }
+
+        return "";
+    }
+    //
     String get_path()
     {
-        String path = "";
         struct tm timeinfo;
         if (!getLocalTime(&timeinfo))
         {
-            return path;
+            
+            log_d("-----No time----");
+            return "";
         }
-        String p_month = "";
-        path = "/" + String(timeinfo.tm_year + 1900) + "/" + String(timeinfo.tm_mon + 1) + "/" + String(timeinfo.tm_mday) + ".txt";
-        if (!existFile(path))
+        char buff[20] = {};
+        sprintf(buff, "/DATA/%04d%02d", timeinfo.tm_year + 1900, timeinfo.tm_mon + 1);
+        if (!existFile(String(buff)))
         {
-            createDir(path);
+            createDir(String(buff));
         }
-        listDir("/", 1);
-        return path;
+        memset(buff, 0, 20);
+        sprintf(buff, "/DATA/%04d%02d/%02d.txt", timeinfo.tm_year + 1900, timeinfo.tm_mon + 1, timeinfo.tm_mday);
+        return String(buff);
     }
 
     uint8_t getFileCount(String dir)
     {
+        if (!SD.exists(dir.c_str()))
+        {
+            return 0;
+        }
         File d = SD.open(dir);
         int count_files = 0;
         File file = d.openNextFile();
@@ -76,9 +138,19 @@ private:
     }
     String getFirstDirName(String dir)
     {
-        File d = SD.open(dir);
-        String name = String(d.openNextFile().name());
-        d.close();
+        if (!SD.exists(dir.c_str()))
+        {
+            return "";
+        }
+        String name = "";
+        File root = SD.open(dir);
+        File f = root.openNextFile();
+        if (f)
+        {
+            name = f.name();
+        }
+        f.close();
+        root.close();
         return name;
     }
     void print()
@@ -95,12 +167,6 @@ private:
             log_d("---- SD Card not Init ----");
         }
         listDir("/DATA", 0);
-        log_d("File count: %d", getFileCount("/DATA"));
-        log_d("First name: %s", getFirstDirName("/DATA").c_str());
-        removeDir(getFirstDirName("/DATA").c_str());
-        log_d("\nFile count: %d", getFileCount("/DATA"));
-        listDir("/DATA", 0);
-        
     }
 };
 

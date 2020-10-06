@@ -49,6 +49,23 @@ void WebserverApplication::init()
     // server->onNotFound([&]{
     //     log_d("url: %s", server->uri().c_str());
     // });
+    // upload file
+    server->on("/f", HTTP_GET, []() {
+        String path = server->arg("path");
+        log_d("----> path -> %s", path.c_str());
+
+        if (SD.exists(path))
+        {
+            File file = SD.open(path.c_str());
+            server->sendHeader("Content-Disposition", "attachment; filename=" + path.substring(path.lastIndexOf("/") + 1, path.length()));
+            size_t sent = server->streamFile(file, "application/octet-stream");
+            file.close();
+        }
+        else
+        {
+            server->send(200, "text/xml");
+        }
+    });
     // Handle
     server->on("/c", HTTP_POST, this->Webserver_Handler);
     // OTA
@@ -318,7 +335,23 @@ void WebserverApplication::Webserver_Handler()
         server->send(200, "text/plain", "LOGOUT");
     }
     break;
-    case 99:
+    case 83: {
+        JsonObject &root = jsonapi->parseObject(json);
+        String project = root["project"].as<String>();
+        String region = root["region"].as<String>();
+        String registry = root["registry"].as<String>();
+        String device = root["device"].as<String>();
+        String key = root["key"].as<String>();
+        log_d("\-----DEVICE NAME-----\n");
+        log_d("project: %s", project.c_str());
+        log_d("region: %s", region.c_str());
+        log_d("registry: %s", registry.c_str());
+        log_d("devcice: %s", device.c_str());
+        log_d("key: %s", key.c_str());
+        driver->set_ggc((char *)project.c_str(), (char *)region.c_str(), (char *)registry.c_str(), (char *)device.c_str(), (char *)key.c_str());
+        server->send(200, "text/plain", "OK");
+    } break;
+        case 99:
     { //  first load data
         server->send(200, "text/xml", DeviceStatus(true));
     }
@@ -344,6 +377,62 @@ void WebserverApplication::Websocket_Handler(uint8_t num, WStype_t type, uint8_t
     break;
     case WStype_TEXT:
     {
+        String js = (char *)payload;
+        JsonObject &root = jsonapi->parseObject(js);
+        log_d("-->%s", js.c_str());
+        int cm = root["cm"].as<int>();
+        switch (cm)
+        {
+        case 1:
+        {
+        }
+        break;
+        case 2:
+        {
+        }
+        break;
+        case 3:
+        {
+        }
+        break;
+        case 4:
+        {
+            String path = root["path"].as<String>();
+            JsonObject &f_root = jsonapi->createObject();
+            if (path.endsWith(".txt"))
+            {
+            }
+            else
+            {
+                f_root["FILE"] = path;
+                JsonArray &array = f_root.createNestedArray("array");
+                // conf->sd->listDir(path.c_str(), 1);
+                File root_path = SD.open(path.c_str());
+                File file = root_path.openNextFile();
+
+                while (file)
+                {
+                    //Serial.println(file.name());
+                    array.add(String(file.name()));
+                    if (file.isDirectory())
+                    {
+                        array.add("");
+                    }
+                    else
+                    {
+                        array.add(String(file.size()));
+                    }
+                    file = root_path.openNextFile();
+                }
+                path = "";
+                f_root.printTo(path);
+                // log_d("list -> %s", path.c_str());
+                String s = "{\"cm\":4, \"path\":" + path + "}";
+                webSocket->sendTXT(num, s);
+            }
+        }
+        break;
+        }
     }
     break;
     }
@@ -437,8 +526,8 @@ String WebserverApplication::DeviceStatus(bool ret) //
     info["Lifetime"] = sysIf.Life_Time;
 
     info["Runningtime"] = driver->sysDriver->get_running_time(); //
-    info["sdsize"] = 0;      //cardSize;
-    info["sdusedsize"] = 0;  //usedSize;
+    info["sdsize"] = 0;                                          //cardSize;
+    info["sdusedsize"] = 0;                                      //usedSize;
     info["totaldevice"] = driver->total_devices();
     info["totaldevCon"] = driver->total_devices_connected();
     info["lastssoc"] = driver->net->Last_SSOC_Unix();

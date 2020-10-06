@@ -5,6 +5,8 @@ SemaphoreHandle_t NetworkClass::xSemaphoreGSM = nullptr;
 NetIF_Task_Structure NetworkClass::netif = {};
 WifiDriver *NetworkClass::wifi = nullptr;
 Ethernet *NetworkClass::eth = nullptr;
+GoogleIotCore *NetworkClass::gg = nullptr;
+
 HTTPClient *NetworkClass::http = nullptr;
 
 HardwareSerial *NetworkClass::sim_serial = nullptr;
@@ -69,15 +71,22 @@ void NetworkClass::NetIF_set(NetIF_Task_Structure in)
         netif.gsm = in.gsm;
         e |= EVENT_GSM_DISCONNECTED;
     }
+
+    netif.gg = in.gg;
+    gg->setup(netif.gg.ProjectID, netif.gg.Location, netif.gg.Registry_id, netif.gg.Device_id, netif.gg.Private_Key);
+
     log_d("WIFI      -EN:%d  -SSID: %s -PASS: %s", netif.wifi.ENABLE, netif.wifi.SSID, netif.wifi.PASS);
     log_d("Ethernet  -EN:%d ", netif.eth.ENABLE);
     log_d("GSM       -EN:%d ", netif.gsm.ENABLE);
+
     xEventGroupSetBits(NetIF_EventGroup, e);
 }
 
 void NetworkClass::begin()
 {
     modem = new TinyGsm(*sim_serial);
+    gg->add_handle_check(ggc_check);
+    gg->begin();
     xTaskCreate(this->Net_Task, "NetIF Task", 8192, this, 12, NULL);
 }
 
@@ -186,6 +195,10 @@ void NetworkClass::gsm_init()
         }
         xSemaphoreGive(xSemaphoreGSM);
     }
+}
+
+bool ggc_init(){
+
 }
 
 void NetworkClass::Net_Task(void *arg)
@@ -446,6 +459,10 @@ bool NetworkClass::SSOC_HTTP_Send(const String &api, bool is_swh_system)
         }
     }
     return ret;
+}
+
+bool NetworkClass::GGCP_MQTT_Send(const String &api){
+
 }
 
 bool RTCClass::sync(long gmtOffset_sec, int daylightOffset_sec, const char *server1, const char *server2, const char *server3)

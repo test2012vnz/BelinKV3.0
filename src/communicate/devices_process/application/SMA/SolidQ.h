@@ -94,22 +94,6 @@ private:
 
     String getString();
 
-    uint16_t to_u16(uint16_t i)
-    {
-        return __bswap_16(i);
-    }
-    uint32_t to_u32(uint32_t *i)
-    {
-        return __bswap_32(*(uint32_t *)i);
-    }
-    float to_float(uint16_t i, uint16_t div = 1)
-    {
-        return __bswap_16(i) / (float)div;
-    }
-    float to_float(uint32_t *i, uint16_t div = 1)
-    {
-        return __bswap_32(*(uint32_t *)i) / (float)div;
-    }
 };
 
 #endif

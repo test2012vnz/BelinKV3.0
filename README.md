@@ -1,6 +1,5 @@
 # BelinKV3.0
 
-# BelinkV2_P 
 -- Current Dev Version: 3.0.1 Beta
 
 # Note 

@@ -18,11 +18,15 @@
 // SMA SolidQ Inverter
 #include "SMA/SolidQ.h"
 #include "SMA/SunnyIsland.h"
+#include "SMA/SMA_RTU.h"
 
 // Sungrow Inverter
 #include "Sungrow/Sungrow.h"
 // Sunspec devices:  SMA, ABB
 #include "sunspec/SunSpec.h"
+
+//
+#include "EPSolarPV/Tracer_B_Series.h"
 
 // IEC 62056-21 Devices
 #include "IEC62056_21/Vinasino/VinasinoVSE3T.h"

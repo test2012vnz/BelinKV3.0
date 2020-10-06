@@ -34,6 +34,10 @@ bool Driver::set_gsm(uint8_t e)
     storage->net->set_gsm(e);
 }
 
+bool Driver::set_ggc(char *ProjectID, char* Location, char* Registry_id, char* Device_id, char* Private_Key){
+    storage->net->set_gg(ProjectID, Location, Registry_id, Device_id, Private_Key);
+}
+
 NetIF_Task_Structure Driver::get_netif()
 {
     return net->get_netif();
@@ -100,6 +104,11 @@ String Driver::devicesListString()
 {
     return storage->dev->toString();
 }
+
+//
+void Driver::google_mess_recieved_handle(String &topic, String& payload){
+    log_d("incoming: %s - %s", String(topic).c_str(), String(payload).c_str());
+}
 //======================= DRIVER =======================
 void Driver::initPinOut()
 {
@@ -118,6 +127,7 @@ void Driver::initPinOut()
 uint32_t Driver::adc_read_radiation()
 {
     uint16_t vol = analogRead(ADC_VOLT_PIN);
+    return vol;
     uint32_t result_radiation = map(vol, 0, 4096, 0, 1976);
     if (result_radiation > 300)
     {
@@ -127,7 +137,8 @@ uint32_t Driver::adc_read_radiation()
 }
 uint32_t Driver::adc_read_temperature()
 {
-    uint16_t vol = analogRead(ADC_CURRENT_PIN);
+    uint16_t vol = analogRead(ADC_VOLT_PIN);
+    return vol;
     uint32_t tem = map(vol, 0, 4096, 0, 330) + 13;
     if (tem < 100)
     {

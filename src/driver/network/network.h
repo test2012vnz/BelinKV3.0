@@ -4,6 +4,7 @@
 #include "../../type.h"
 #include "wifi/wifi.h"
 #include "ethernet/ethernet.h"
+#include "GoogleIotCore/GoogleIotCore.h"
 #include "HTTPClient.h"
 
 #include "../../../lib/ESP32Ping/ESP32Ping.h"
@@ -73,7 +74,7 @@ public:
     String timeFormated(tm timeinfo)
     {
         char buff[30] = {};
-        sprintf(buff, "20%02d-%02d-%02d %02d:%02d:%02d UTC+%d", timeinfo.tm_year % 100, timeinfo.tm_mon + 1, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, gmtOffset_sec / 3600);
+        sprintf(buff, "20%02d-%02d-%02d %02d:%02d:%02d", timeinfo.tm_year % 100, timeinfo.tm_mon + 1, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
         return String(buff);
     }
 
@@ -93,7 +94,8 @@ public:
         WiFi.onEvent(WiFiEvent);
         wifi = new WifiDriver(&WiFi);
         http = new HTTPClient();
-        rtc = new RTCClass(25200);
+        rtc = new RTCClass(0);
+        gg = new GoogleIotCore();
     }
     ~NetworkClass()
     {
@@ -105,7 +107,7 @@ public:
     static void wifi_init();
     static void eth_int();
     static void gsm_init();
-
+    static bool ggc_init();
     // HANDLE FUNCTIONS
     static void NetIF_set(NetIF_Task_Structure in);
     static bool connect_ap(String ssid, String pass)
@@ -126,7 +128,11 @@ public:
     {
         gsm_reset_fnc = fnc;
     }
-    bool network_connected()
+    void set_gg_handle_fnc(void (*fn)(String&, String&)){
+        gg->add_handle_mss(fn);
+    }
+
+    static bool network_connected()
     {
         bool i = netif.wifi.STATUS == 1 || netif.eth.STATUS == 1 || netif.gsm.STATUS == 1;
         if (!i)
@@ -135,6 +141,22 @@ public:
             Last_SSOC_Send_Unix = 0;
         }
         return i;
+    }
+    static bool ggc_check()
+    {
+        if (!network_connected())
+        {
+            return false;
+        }
+        if (String(netif.gg.ProjectID) == "" ||
+            String(netif.gg.Location) == "" ||
+            String(netif.gg.Registry_id) == "" ||
+            String(netif.gg.Private_Key) == "")
+        {
+            log_d("GG Check False");
+            return false;
+        }
+        return true;
     }
     int wifi_signal()
     {
@@ -164,6 +186,7 @@ public:
     static esp_err_t setDefaultIf(tcpip_adapter_if_t tcpip_if);
     static bool API_Send_Message(const String &api, bool is_swh_system = false);
     static bool SSOC_HTTP_Send(const String &api, bool is_swh_system = false);
+    static bool GGCP_MQTT_Send(const String &api);
     static uint32_t Last_SSOC()
     {
         return Last_SSOC_Send;
@@ -176,17 +199,17 @@ public:
     static String api_ready_frame(String device, String data)
     {
         String api = "{";
-        api += "\"time\": \"2020/8/19 21:36:56 UTC +0\",";
+        api += "\"time\": \""+rtc->timeFormated()+"\",";
         api += "\"packet_count\": 1,";
         api += "\"packet_total\": 1,";
         api += "\"packet_uuid\": \"hyshhay17719suyaaju1u1jaoo112\",";
-        api += "\"comdevices\": 3,";
+        api += "\"manage_device_count\": 3,";
         api += device;
         api += j_get_network_info();
-        api += ",\"data\":[";
+        api += ",\"manage_device_data\":[";
         api += data;
         api += "],\"ambient\":{";
-        api += "},\"3rd\":{";
+        api += "},\"external_data\":{";
         api += "}}";
         return api;
     }
@@ -226,7 +249,7 @@ private:
 
     static WifiDriver *wifi;
     static Ethernet *eth;
-
+    static GoogleIotCore *gg;
     static HTTPClient *http;
 
     static uint32_t Last_SSOC_Send;

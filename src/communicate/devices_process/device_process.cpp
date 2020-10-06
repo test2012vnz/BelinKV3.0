@@ -33,7 +33,9 @@ void DeviceProcess::sync_from_storage(Device_Info_Structure *in, int x)
             break;
             case Micro_DPM380:
             {
-                list.add(new DPM(in[i], Driver::getPortDriver(in[i].info.RTU.com)));
+                // list.add(new DPM(in[i], Driver::getPortDriver(in[i].info.RTU.com)));
+                //EPSolarTracer
+                list.add(new EPSolarTracer(in[i], Driver::getPortDriver(in[i].info.RTU.com)));
             }
             break;
             case Selec_MFM_383:
@@ -84,6 +86,16 @@ void DeviceProcess::sync_from_storage(Device_Info_Structure *in, int x)
             case Huawei_Grid_Tie_V3:
             {
                 list.add(new HuaweiV3(in[i], Driver::getPortDriver(in[i].info.RTU.com)));
+            }
+            break;
+            case SMA_RTU:
+            {
+                list.add(new SMARTUClass(in[i], Driver::getPortDriver(in[i].info.RTU.com)));
+            }
+            break;
+            case SMA_TCP:
+            {
+                list.add(new SMARTUClass(in[i], Driver::getPortDriver(in[i].info.RTU.com), true));
             }
             break;
             }
@@ -162,6 +174,7 @@ void DeviceProcess::load()
 
             String s = p->data->toString();
             log_d("load: %s", s.c_str());
+            // Driver::sd->write_log(s);
             //Check SWH System to Send API
             bool is_swh_system = (p->data->devType() == SWH_System) ? true : false;
             if (Driver::API_Send_Message(s, is_swh_system))
@@ -183,10 +196,6 @@ void DeviceProcess::load()
     delete p;
     deviceReadOK = cnt;
     last_routine = seconds();
-    if (Driver::devices_size() == size)
-    {
-        Driver::websocket_send(stt);
-    }
 
     if (deviceSendFailed > 100)
     {

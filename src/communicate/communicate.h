@@ -3,7 +3,6 @@
 
 #include "webserver_app/webserverapp.h"
 #include "devices_process/device_process.h"
-#include "GoogleClient/GoogleClient.h"
 
 class Communicate
 {
@@ -12,7 +11,6 @@ public:
     {
         web = new WebserverApplication();
         process = new DeviceProcess();
-        google->begin();
     }
     ~Communicate()
     {
@@ -26,7 +24,6 @@ public:
     
     WebserverApplication *web = nullptr;
     DeviceProcess *process = nullptr;
-    GoogleClient *google = nullptr;
 
 private:
     /* data */
