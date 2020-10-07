@@ -25,12 +25,12 @@ bool Sungrow::load()
 	{
 		status = false;
 	}
-	if (readHreg(7012, (uint16_t *)&d3, 23) != 0)
+	if (readIreg(7012, (uint16_t *)&d3, 23) != 0)
 	{
 		status = false;
 	}
 	memset(SN, 0, sizeof(SN));
-	if (readHreg(4989, (uint16_t *)&SN, 10) != 0)
+	if (readIreg(4989, (uint16_t *)&SN, 10) != 0)
 	{
 		// status = false;
 	}
@@ -66,12 +66,12 @@ String Sungrow::getString()
 	data += ",A20:" + String(to_u16(d2.DC_Voltage9) / (float)10);
 	data += ",A21:" + String(to_u16(d2.DC_current9) / (float)10);
 
-	data += ",A22:" + String(to_u16(d2.DC_Voltage10) / (float)10);
-	data += ",A23:" + String(to_u16(d2.DC_current10) / (float)10);
-	data += ",A24:" + String(to_u16(d2.DC_Voltage11) / (float)10);
-	data += ",A25:" + String(to_u16(d2.DC_current11) / (float)10);
-	data += ",A26:" + String(to_u16(d2.DC_Voltage12) / (float)10);
-	data += ",A27:" + String(to_u16(d2.DC_current12) / (float)10);
+	// data += ",A22:" + String(to_u16(d2.DC_Voltage10) / (float)10);
+	// data += ",A23:" + String(to_u16(d2.DC_current10) / (float)10);
+	// data += ",A24:" + String(to_u16(d2.DC_Voltage11) / (float)10);
+	// data += ",A25:" + String(to_u16(d2.DC_current11) / (float)10);
+	// data += ",A26:" + String(to_u16(d2.DC_Voltage12) / (float)10);
+	// data += ",A27:" + String(to_u16(d2.DC_current12) / (float)10);
 
 	data += ",A28:" + String(to_u16(d.phase_A_voltage) / (float)10);
 	data += ",A29:" + String(to_u16(d.Phase_A_current) / (float)10);
@@ -114,34 +114,35 @@ String Sungrow::getString()
 	data += ",A61:" + String(to_u16(d3.String_16_current) / (float)100);
 	data += ",A62:" + String(to_u16(d3.String_17_current) / (float)100);
 	data += ",A63:" + String(to_u16(d3.String_18_current) / (float)100);
-	data += ",A64:" + String(to_u16(d3.String_19_current) / (float)100);
-	data += ",A65:" + String(to_u16(d3.String_20_current) / (float)100);
-	data += ",A66:" + String(to_u16(d3.String_21_current) / (float)100);
-	data += ",A67:" + String(to_u16(d3.String_22_current) / (float)100);
-	data += ",A68:" + String(to_u16(d3.String_23_current) / (float)100);
-	data += ",A69:" + String(to_u16(d3.String_24_current) / (float)100);
+	// data += ",A64:" + String(to_u16(d3.String_19_current) / (float)100);
+	// data += ",A65:" + String(to_u16(d3.String_20_current) / (float)100);
+	// data += ",A66:" + String(to_u16(d3.String_21_current) / (float)100);
+	// data += ",A67:" + String(to_u16(d3.String_22_current) / (float)100);
+	// data += ",A68:" + String(to_u16(d3.String_23_current) / (float)100);
+	// data += ",A69:" + String(to_u16(d3.String_24_current) / (float)100);
 
 	char str[20];
 	memset(str, 0, 20);
 	memcpy(str, SN, 20);
-	data += ",A70:\"" + String(str) + "\n";
+	data += ",A70:\"" + String(str) + "\"";
 	//api
 	String res = "";
 #if API_VERSION == 1
 
 #elif API_VERSION == 0
 	res += APIHeader();
-	res += ",SungrowList:[{";
-	res += "Id:" + String(local_id);
-	if (!status == false)
+	res += ",SungrowV3List:[{";
+	res += "Id:" + String(id);
+	if (status == false)
 	{
 		res += ",Status:0";
 	}
 	else
 	{
 		res += ",Status:1";
-		res += data;
+	res += data;	
 	}
+	
 	res += "}]}";
 #endif
 	return res;
